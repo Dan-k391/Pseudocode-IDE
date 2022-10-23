@@ -1,6 +1,13 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router";
-import store from "./store";
+import ElementPlus from "element-plus";
+import Vue3DraggableResizable from "vue3-draggable-resizable";
 
-createApp(App).use(store).use(router).mount("#app");
+// styles
+import "./styles/element/index.scss";
+import "vue3-draggable-resizable/dist/Vue3DraggableResizable.css";
+
+const app = createApp(App);
+app.use(ElementPlus);
+app.use(Vue3DraggableResizable);
+app.mount("#app");
