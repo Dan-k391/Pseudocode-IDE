@@ -1,13 +1,14 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import ElementPlus from "element-plus";
-import Vue3DraggableResizable from "vue3-draggable-resizable";
-
+import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 // styles
 import "./styles/element/index.scss";
-import "vue3-draggable-resizable/dist/Vue3DraggableResizable.css";
+
 
 const app = createApp(App);
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component);
+}
 app.use(ElementPlus);
-app.use(Vue3DraggableResizable);
 app.mount("#app");

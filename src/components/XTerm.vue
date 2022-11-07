@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, toRefs, watch, defineEmits } from "vue";
+import { onMounted, onUnmounted, ref, toRefs, watch, defineEmits, defineExpose } from "vue";
 import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
 
@@ -19,7 +19,6 @@ let terminal: Terminal;
 let fit_addon: FitAddon;
 
 let cmd = "";
-
 let prefix = "$ ";
 
 function execute_cmd(cmd: string): void {
@@ -95,5 +94,14 @@ onMounted(() => {
                 }
         }
     });
+});
+
+function report(msg: string): void {
+    terminal.writeln(msg);
+    terminal.write(prefix);
+}
+
+defineExpose({
+    report
 });
 </script>

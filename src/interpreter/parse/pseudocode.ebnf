@@ -1,0 +1,28 @@
+Program ::= FuncDef | ProcDef | {Statement}
+
+Type ::= "INTEGER" | "REAL" | "BOOLEAN" | "CHAR" | "STRING"
+
+FuncDef ::= "FUNCTION" IDENT "(" [Params] ")" "RETURNS" Type {Statement} "ENDFUNCTION"
+ProcDef ::= "PROCEDURE" IDENT "(" [Params] ")" {Statement} "ENDPROCEDURE"
+
+Params ::= Param {"," Param}
+Param ::= ["BYVAL" | "BYREF"] IDENT ":" Type
+
+Statement ::= Decl | Assign | If | While | For | Return
+Expr ::= Equality
+Equality ::= Comparison {("=" | "<>" | "OR") Comparison}
+Relation ::= Expr {("<" | "<=" | ">" | ">=" | "AND") Expr}
+Term ::= Factor {("+" | "-" | "&") Factor}
+Factor ::= Unary {("*" | "/") Unary}
+Unary ::= ["+" | "-" | "NOT"] Primary
+Primary ::= IDENT | NUMBER | STRING | BOOLEAN | "(" Expr ")" | CallExpr
+
+CallExpr ::= IDENT "(" [Args] ")" | "CALL" IDENT "(" [Args] ")"
+Args ::= Expr {"," Expr}
+
+Decl ::= "DECLARE" IDENT ":" Type | "DECLARE" IDENT ":" "ARRAY" "OF" Type
+Assign ::= IDENT "<-" Expr | IDENT "[" Expr "]" "<-" Expr
+If ::= "IF" Expr "THEN" Statement ["ELSE" Statement] "ENDIF"
+WHILE ::= "WHILE" Expr {Statement} "ENDWHILE"
+FOR ::= "FOR" IDENT "<-" Expr "TO" Expr ["STEP" Expr] {Statement} "NEXT" IDENT
+Return ::= "RETURN" Expr

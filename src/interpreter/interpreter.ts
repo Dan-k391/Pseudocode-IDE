@@ -1,22 +1,17 @@
-import { Scanner } from "./scanner";
-import { Token } from "./token";
+import { Scanner } from "./lex/scanner";
 
 
 class Interpreter {
     input: string;
-    
-    tokens: Array<Token>;
-    scanner: Scanner;
 
     constructor(input: string) {
         this.input = input;
-        this.tokens = [];
-        this.scanner = new Scanner(this.input);
     }
 
     interpret(): void {
-        this.tokens = this.scanner.scan();
-        console.log(this.tokens);
+        const scanner = new Scanner(this.input);
+        const tokens = scanner.scan();
+        console.log(tokens);
     }
 
 }
