@@ -1,21 +1,21 @@
 class SyntaxError {
-    msg: string;
+    message: string;
     line: number;
-    start_column: number;
-    end_column: number;
+    startColumn: number;
+    endColumn: number;
 
-    constructor(msg: string, line: number, start_column: number, end_column: number) {
-        this.msg = msg;
+    constructor(message: string, line: number, startColumn: number, endColumn: number) {
+        this.message = message;
         this.line = line;
-        this.start_column = start_column;
-        this.end_column = end_column;
+        this.startColumn = startColumn;
+        this.endColumn = endColumn;
     }
 
     toString(): string {
-        if (this.line != null && this.start_column != null) {
-            return '\x1b[31;1mSyntaxError: \x1B[0m' + this.msg + ' at line ' + this.line.toString() + ':' + this.start_column.toString();
+        if (this.line != null && this.startColumn != null) {
+            return '\x1b[31;1mSyntaxError: \x1B[0m' + this.message + ' at line ' + this.line.toString() + ':' + this.startColumn.toString();
         }
-        return this.msg;
+        return this.message;
     }
 }
 

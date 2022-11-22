@@ -40,12 +40,12 @@ const terminal = ref<HTMLElement | null>(null);
 function run(): void {
     let code = editor.value!.get_code();
     let interpreter = new Interpreter(code);
-    try {
+    // try {
         interpreter.interpret();
-    }
-    catch (e: any) {
-        report(e.toString());
-    }
+    // }
+    // catch (e: any) {
+    //     report(e.toString());
+    // }
 }
 
 function report(err_msg: string): void {

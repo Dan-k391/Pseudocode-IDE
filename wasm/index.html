@@ -6,20 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/wabt@1.0.30/index.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/wabt@1.0.30/index.js"></script> -->
     <script>
-    const wabt = require("wabt");
+//     const wabt = require("wabt");
     
-    const inputWat = "main.wat";
+//     const inputWat = "main.wat";
 
-    const wasmModule = wabt.parseWat(inputWat, `(module
-  (func $i (import "imports" "imported_func") (param i32))
-  (func (export "exported_func")
-    i32.const 42
-        call $i))`);
-    const { buffer } = wasmModule.toBinary({});
+//     const wasmModule = wabt.parseWat(inputWat, `(module
+//   (func $i (import "imports" "imported_func") (param i32))
+//   (func (export "exported_func")
+//     i32.const 42
+//         call $i))`);
+//     const { buffer } = wasmModule.toBinary({});
 
-    console.log(buffer);
+//     console.log(buffer);
 
     var importObject = {
         imports: {
@@ -30,12 +30,13 @@
     };
 
     fetch('./simple.wasm')
-    .then(res =>
-    res.arrayBuffer()
-    ).then(bytes =>
-    WebAssembly.instantiate(bytes, importObject)
-    ).then(results => {
-    results.instance.exports.exported_func();
+    .then(res => res.arrayBuffer())
+    .then(bytes => {
+        console.log(bytes);
+        return WebAssembly.instantiate(bytes, importObject);
+    })
+    .then(results => {
+        results.instance.exports.exported_func();
     });
     </script>
 </head>

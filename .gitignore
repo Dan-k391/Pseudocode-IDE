@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+assemblyscript
 /dist
 
 
@@ -21,3 +22,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+wasm/WebAssembly.pdf

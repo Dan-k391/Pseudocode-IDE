@@ -1,11 +1,11 @@
 const enum tokenType {
     // single character tokens
     LEFT_PAREN, RIGHT_PAREN, LEFT_BRACKET, RIGHT_BRACKET,
-    COMMA, DOT, MINUS, PLUS, STAR, SLASH, COLON,
+    COMMA, DOT, MINUS, PLUS, STAR, SLASH, COLON, AMPERSAND, // &
 
     // one or two character tokens
     LESS_GREATER, LESS_MINUS,
-    EQUAL, EQUAL_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
+    EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
 
     // literals
     IDENTIFIER, STRING_CONST, INT_CONST, REAL_CONST, CHAR_CONST, BOOL_CONST,
@@ -23,20 +23,21 @@ const enum tokenType {
     FOR, TO, STEP, NEXT,
     MOD, AND, OR, NOT,
     OUTPUT, INPUT, RND, TIME,
+    TRUE, FALSE,
 
     // types
     INTEGER, REAL, CHAR, STRING, BOOLEAN,
 
     EOF
-}
+};
 
 class Token {
-    type: tokenType;
-    lexeme: string;
-    literal: any;
-    line: number;
-    startColumn: number;
-    endColumn: number;
+    public type: tokenType;
+    public lexeme: string;
+    public literal: any;
+    public line: number;
+    public startColumn: number;
+    public endColumn: number;
 
     constructor(type: tokenType, lexeme: string, literal: any, line: number, startColumn: number, endColumn: number) {
         this.type = type;

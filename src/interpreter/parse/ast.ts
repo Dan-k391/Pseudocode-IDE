@@ -1,38 +1,51 @@
-class ASTNode {
+import { Token, tokenType } from "../lex/token";
+
+
+abstract class ASTNode {
+    public abstract toString(): string;
 }
 
-class Expression extends ASTNode {
+class Expr extends ASTNode {
+    toString(): string {
+        return "Expr";
+    }
 }
 
-class Statement extends ASTNode {
+class Stmt extends ASTNode {
+    toString(): string {
+        return "Stmt";
+    }
 }
 
-interface Param extends ASTNode {
+interface Param {
     ident: string;
     type: string;
 }
 
-interface Arg extends ASTNode {
+interface Arg {
     ident: string;
     type: string;
 }
 
 class ProgramNode extends ASTNode {
-    body: Array<Statement>;
+    public body: Array<Stmt>;
 
-    constructor(body: Array<Statement>) {
+    constructor(body: Array<Stmt>) {
         super();
         this.body = body;
     }
 
+    toString(): string {
+        return "ProgramNode";
+    }
 }
 
-class FuncDefNode extends ASTNode {
-    ident: string;
-    params: Array<Param>;
+class FuncDefNode extends Stmt {
+    public ident: string;
+    public params: Array<Param>;
     // change type
-    type: string;
-    body: Array<Statement>;
+    public type: string;
+    public body: Array<Stmt>;
 
     constructor(ident: string, params: Array<Param>, type: string, body: Array<ASTNode>) {
         super();
@@ -41,46 +54,62 @@ class FuncDefNode extends ASTNode {
         this.type = type;
         this.body = body;
     }
+
+    toString(): string {
+        return "FuncDefNode";
+    }
 }
 
-class ProcDefNode extends ASTNode {
-    ident: string;
-    params: Array<Param>;
-    body: Array<Statement>;
+class ProcDefNode extends Stmt {
+    public ident: string;
+    public params: Array<Param>;
+    public body: Array<Stmt>;
 
-    constructor(ident: string, params: Array<Param>, body: Array<Statement>) {
+    constructor(ident: string, params: Array<Param>, body: Array<Stmt>) {
         super();
         this.ident = ident;
         this.params = params;
         this.body = body;
     }
-}
 
-class ReturnNode extends Statement {
-    expression: Expression;
-
-    constructor(expression: Expression) {
-        super();
-        this.expression = expression;
+    toString(): string {
+        return "ProcDefNode";
     }
 }
 
-class VarDeclNode extends Statement {
-    ident: string;
-    type: string;
+class ReturnNode extends Stmt {
+    public expr: Expr;
 
-    constructor(ident: string, type: string) {
+    constructor(expr: Expr) {
+        super();
+        this.expr = expr;
+    }
+
+    toString(): string {
+        return "ReturnNode";
+    }
+}
+
+class VarDeclNode extends Stmt {
+    public ident: Token;
+    public type: Token;
+
+    constructor(ident: Token, type: Token) {
         super();
         this.ident = ident;
         this.type = type;
     }
+
+    toString(): string {
+        return "VarDeclNode";
+    }
 }
 
-class ArrDeclNode extends Statement {
-    ident: string;
-    type: string;
-    lower: number;
-    upper: number;
+class ArrDeclNode extends Stmt {
+    public ident: string;
+    public type: string;
+    public lower: number;
+    public upper: number;
 
     constructor(ident: string, type: string, lower: number, upper: number) {
         super();
@@ -89,49 +118,65 @@ class ArrDeclNode extends Statement {
         this.lower = lower;
         this.upper = upper;
     }
+
+    toString(): string {
+        return "ArrDeclNode";
+    }
 }
 
-class TypeDefNode extends Statement {
-    ident: string;
-    body: VarDeclNode;
+class TypeDefNode extends Stmt {
+    public ident: string;
+    public body: VarDeclNode;
 
     constructor(ident: string, body: VarDeclNode) {
         super();
         this.ident = ident;
         this.body = body;
     }
-}
 
-class VarAssignNode extends Statement {
-    ident: string;
-    expression: Expression;
-
-    constructor(ident: string, expression: Expression) {
-        super();
-        this.ident = ident;
-        this.expression = expression;
+    toString(): string {
+        return "TypeDefNode";
     }
 }
 
-class ArrAssignNode extends Statement {
-    ident: string;
-    index: number;
-    expression: Expression;
+class VarAssignNode extends Stmt {
+    public ident: Token;
+    public expr: Expr;
 
-    constructor(ident: string, index: number, expression: Expression) {
+    constructor(ident: Token, expr: Expr) {
+        super();
+        this.ident = ident;
+        this.expr = expr;
+    }
+
+    toString(): string {
+        return "VarAssignNode";
+    }
+}
+
+class ArrAssignNode extends Stmt {
+    public ident: string;
+    public index: number;
+    public expr: Expr;
+
+    constructor(ident: string, index: number, expr: Expr) {
         super();
         this.ident = ident;
         this.index = index;
-        this.expression = expression;
+        this.expr = expr;
+    }
+
+    toString(): string {
+        return "ArrAssignNode";
     }
 }
 
-class IfNode extends Statement {
-    condition: Expression;
-    body: Array<Statement>;
-    else_body?: Array<Statement>;
+class IfNode extends Stmt {
+    public condition: Expr;
+    public body: Array<Stmt>;
+    public else_body?: Array<Stmt>;
 
-    constructor(condition: Expression, body: Array<Statement>, else_body?: Array<Statement>) {
+    constructor(condition: Expr, body: Array<Stmt>, else_body?: Array<Stmt>) {
         super();
         this.condition = condition;
         this.body = body;
@@ -139,28 +184,36 @@ class IfNode extends Statement {
             this.else_body = else_body;
         }
     }
+
+    toString(): string {
+        return "IfNode";
+    }
 }
 
-class WhileNode extends Statement {
-    condition: Expression;
-    body: Array<Statement>;
+class WhileNode extends Stmt {
+    public condition: Expr;
+    public body: Array<Stmt>;
 
-    constructor(condition: Expression, body: Array<Statement>) {
+    constructor(condition: Expr, body: Array<Stmt>) {
         super();
         this.condition = condition;
         this.body = body;
     }
+
+    toString(): string {
+        return "WhileNode";
+    }
 }
 
-class ForNode extends Statement {
+class ForNode extends Stmt {
     // the identifier of the variable
-    ident: string;
-    start: number;
-    end: number;
-    body: Array<Statement>;
-    step: number;
+    public ident: string;
+    public start: number;
+    public end: number;
+    public body: Array<Stmt>;
+    public step: number;
 
-    constructor(ident: string, start: number, end: number, body: Array<Statement>, step: number) {
+    constructor(ident: string, start: number, end: number, body: Array<Stmt>, step: number) {
         super();
         this.ident = ident;
         this.start = start;
@@ -168,112 +221,182 @@ class ForNode extends Statement {
         this.body = body;
         this.step = step;
     }
-}
 
-class VarExprNode extends Expression {
-    ident: string;
-
-    constructor(ident: string) {
-        super();
-        this.ident = ident;
+    toString(): string {
+        return "ForNode";
     }
 }
 
-class ArrExprNode extends Expression {
-    ident: string;
-    index: number;
+class ExprStmtNode extends Stmt {
+    public expr: Expr;
+
+    constructor(expr: Expr) {
+        super();
+        this.expr = expr;
+    }
+
+    toString(): string {
+        return "ExprStmtNode";
+    }
+}
+
+class VarExprNode extends Expr {
+    public ident: Token;
+
+    constructor(ident: Token) {
+        super();
+        this.ident = ident;
+    }
+
+    toString(): string {
+        return "VarExprNode";
+    }
+}
+
+class ArrExprNode extends Expr {
+    public ident: string;
+    public index: number;
 
     constructor(ident: string, index: number) {
         super();
         this.ident = ident;
         this.index = index;
     }
+
+    toString(): string {
+        return "ArrExprNode";
+    }
 }
 
-class CallExprNode extends Expression {
-    ident: string;
-    args: Array<Arg>;
+class CallExprNode extends Expr {
+    public ident: string;
+    public args: Array<Arg>;
 
     constructor(ident: string, args: Array<Arg>) {
         super();
         this.ident = ident;
         this.args = args;
     }
+
+    toString(): string {
+        return "CallExprNode";
+    }
 }
 
-class UnaryExprNode extends Expression {
-    operator: string;
-    operand: Expression;
+class UnaryExprNode extends Expr {
+    public operator: Token;
+    public operand: Expr;
 
-    constructor(operator: string, operand: Expression) {
+    constructor(operator: Token, operand: Expr) {
         super();
         this.operator = operator;
         this.operand = operand;
     }
-}
 
-class BinaryExprNode extends Expression {
-    operator: string;
-    left: Expression;
-    right: Expression;
-
-    constructor(operator: string, left: Expression, right: Expression) {
-        super();
-        this.operator = operator;
-        this.left = left;
-        this.right = right;
+    toString(): string {
+        return "UnaryExprNode";
     }
 }
 
-class NumberExprNode extends Expression {
-    value: number;
+class BinaryExprNode extends Expr {
+    public left: Expr;
+    public operator: Token;
+    public right: Expr;
+
+    constructor(left: Expr, operator: Token, right: Expr) {
+        super();
+        this.left = left;
+        this.operator = operator;
+        this.right = right;
+    }
+
+    toString(): string {
+        return "BinaryExprNode";
+    }
+}
+
+class IntExprNode extends Expr {
+    public value: number;
 
     constructor(value: number) {
         super();
         this.value = value;
     }
+
+    toString(): string {
+        return "IntExprNode";
+    }
 }
 
-class StringExprNode extends Expression {
-    value: string;
+class RealExprNode extends Expr {
+    public value: number;
+
+    constructor(value: number) {
+        super();
+        this.value = value;
+    }
+
+    toString(): string {
+        return "RealExprNode";
+    }
+}
+
+class StringExprNode extends Expr {
+    public value: string;
 
     constructor(value: string) {
         super();
         this.value = value;
     }
+
+    toString(): string {
+        return "StringExprNode";
+    }
 }
 
-class BoolExprNode extends Expression {
-    value: boolean;
+class BoolExprNode extends Expr {
+    public value: boolean;
 
     constructor(value: boolean) {
         super();
         this.value = value;
     }
-}
 
-class OutputNode extends Statement {
-    expression: Expression;
-
-    constructor(expression: Expression) {
-        super();
-        this.expression = expression;
+    toString(): string {
+        return "BoolExprNode";
     }
 }
 
-class InputNode extends Statement {
-    ident: string;
+class OutputNode extends Stmt {
+    public expr: Expr;
+
+    constructor(expr: Expr) {
+        super();
+        this.expr = expr;
+    }
+
+    toString(): string {
+        return "OutputNode";
+    }
+}
+
+class InputNode extends Stmt {
+    public ident: string;
 
     constructor(ident: string) {
         super();
         this.ident = ident;
     }
+
+    toString(): string {
+        return "InputNode";
+    }
 }
 
 export {
     ASTNode,
-    Expression,
-    Statement,
+    Expr,
+    Stmt,
     Param,
     Arg,
     ProgramNode,
@@ -288,12 +411,14 @@ export {
     IfNode,
     WhileNode,
     ForNode,
+    ExprStmtNode,
     VarExprNode,
     ArrExprNode,
     CallExprNode,
     UnaryExprNode,
     BinaryExprNode,
-    NumberExprNode,
+    IntExprNode,
+    RealExprNode,
     StringExprNode,
     BoolExprNode,
     OutputNode,

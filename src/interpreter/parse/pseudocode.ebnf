@@ -13,7 +13,7 @@ Expr ::= Equality
 Equality ::= Comparison {("=" | "<>" | "OR") Comparison}
 Relation ::= Expr {("<" | "<=" | ">" | ">=" | "AND") Expr}
 Term ::= Factor {("+" | "-" | "&") Factor}
-Factor ::= Unary {("*" | "/") Unary}
+Factor ::= Unary {("*" | "/" | "MOD") Unary}
 Unary ::= ["+" | "-" | "NOT"] Primary
 Primary ::= IDENT | NUMBER | STRING | BOOLEAN | "(" Expr ")" | CallExpr
 

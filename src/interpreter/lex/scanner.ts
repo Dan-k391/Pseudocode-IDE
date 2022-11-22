@@ -11,18 +11,10 @@
  */
 
 import { SyntaxError } from "../error";
-import { Token, tokenType } from "./token";
+import { tokenType, Token } from "./token";
 
 
 // built-in functions are also combined in KEYWORDS
-
-/**
- * 
-['FUNCTION', 'ENDFUNCTION', 'PROCEDURE', 'ENDPROCEDURE', 'RETURNS', 'RETURN', 'CALL',
-                  'DECLARE', 'ARRAY', 'OF', 'TYPE', 'ENDTYPE',
-                  'IF', 'THEN', 'ELSE', 'ENDIF', 'WHILE', 'ENDWHILE', 'FOR', 'TO', 'STEP', 'NEXT', 'MOD', 'AND', 'OR', 'NOT',
-                  'OUTPUT', 'INPUT', 'RND', 'TIME']
- */
 const KEYWORDS: Map<string, tokenType> = new Map([
     ["FUNCTION", tokenType.FUNCTION],
     ["ENDFUNCTION", tokenType.ENDFUNCTION],
@@ -53,7 +45,15 @@ const KEYWORDS: Map<string, tokenType> = new Map([
     ["OUTPUT", tokenType.OUTPUT],
     ["INPUT", tokenType.INPUT],
     ["RND", tokenType.RND],
-    ["TIME", tokenType.TIME]
+    ["TIME", tokenType.TIME],
+    ["TRUE", tokenType.TRUE],
+    ["FALSE", tokenType.FALSE],
+
+    ["INTEGER", tokenType.INTEGER],
+    ["REAL", tokenType.REAL],
+    ["CHAR", tokenType.CHAR],
+    ["STRING", tokenType.STRING],
+    ["BOOLEAN", tokenType.BOOLEAN]
 ]);
 
 
@@ -106,8 +106,9 @@ class Scanner {
                 }
                 break;
             case ':': this.addToken(tokenType.COLON); break;
+            case '&': this.addToken(tokenType.AMPERSAND); break;
             case '=': this.addToken(tokenType.EQUAL); break;
-            case '<': this.addToken(this.match('-') ? tokenType.LESS_MINUS : (this.match('=') ? tokenType.LESS_EQUAL : tokenType.LESS)); break;
+            case '<': this.addToken(this.match('>') ? tokenType.LESS_GREATER : (this.match('-') ? tokenType.LESS_MINUS : (this.match('=') ? tokenType.LESS_EQUAL : tokenType.LESS))); break;
             case '>': this.addToken(this.match('=') ? tokenType.GREATER_EQUAL : tokenType.GREATER); break;
             case '"': this.string(); break;
             case "'": this.char(); break;
@@ -115,11 +116,6 @@ class Scanner {
             case '\r': break;
             case '\t': break;
             case '\n': this.line++; break;
-            case 'O':
-                if (this.match('R')) {
-                    this.addToken(tokenType.OR);
-                }
-                break;
             default: 
                 if (this.isDigit(c)) {
                     this.number();
