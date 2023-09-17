@@ -1,3 +1,3 @@
 This is the old version
 
-checkout [new version](https://github.com/Dan-k391/Pseudocode-IDE)
+checkout [new version](https://github.com/Dan-k391/web-ide)
